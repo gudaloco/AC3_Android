@@ -22,7 +22,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseFirestore db;
-    private EditText edtNome, edtDescricao, edtTime;
+    //private EditText edtNome, edtDescricao, edtTime;
     private CheckBox checkBoxTomado;
     private Button buttonNovo;
     private RemedioAdapter adapter;
@@ -41,9 +41,9 @@ public class MainActivity extends AppCompatActivity {
         });
 
         db = FirebaseFirestore.getInstance();
-        edtNome = findViewById(R.id.edtNome);
-        edtDescricao = findViewById(R.id.edtDescricao);
-        edtTime = findViewById(R.id.edtTime);
+        //edtNome = findViewById(R.id.edtNome);
+        //edtDescricao = findViewById(R.id.edtDescricao);
+        //edtTime = findViewById(R.id.edtTime);
 
         recyclerMedicamentos = findViewById(R.id.recyclerViewMedicamentos);
         recyclerMedicamentos.setLayoutManager(new LinearLayoutManager(this));

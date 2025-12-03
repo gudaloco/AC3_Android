@@ -56,4 +56,7 @@ public class CadastroEdicao extends AppCompatActivity {
         Intent intent = new Intent(CadastroEdicao.this, MainActivity.class);
         startActivity(intent);
     }
+    private void EditarRemedio(){
+
+    }
 }

@@ -40,7 +40,23 @@ public class RemedioAdapter extends RecyclerView.Adapter<RemedioAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        Remedio f = remedios.get(position);
+        holder.txt1.setText(f.getNome() + " | Descrição: " +f.getDescricao());
+        holder.txt2.setText("Horario " + f.getHorario() + f.getCheck());
+        /*if (f.getCheck()){
+            holder.txt3.setText("Já Visto");
+        } else {
+            holder.txt3.setText("não Visto");
+        }*/
 
+        holder.itemView.setOnClickListener(v -> {
+            if (clickListener != null) clickListener.onItemClick(f);
+        });
+
+        holder.itemView.setOnLongClickListener(v -> {
+            if (longClickListener != null) longClickListener.onItemLongClickListener(f);
+            return true;
+        });
     }
 
     @Override
