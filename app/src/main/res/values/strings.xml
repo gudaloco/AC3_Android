@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name" translatable="false">AF_237052</string>
+    <string name="button_novo">New Medicine</string>
+    <string name="hint_nome">Name of Medicine</string>
+    <string name="hint_descricao">Description</string>
+    <string name="hint_time">Medication Time</string>
+    <string name="button_salvar">Save Medication</string>
+    <string name="taken">already taken</string>
+</resources>
