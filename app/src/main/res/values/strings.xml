@@ -1,4 +1,5 @@
 <resources>
+    <string name="nomeapp">Medication APP</string>
     <string name="app_name" translatable="false">AF_237052</string>
     <string name="button_novo">New Medicine</string>
     <string name="hint_nome">Name of Medicine</string>
@@ -6,7 +7,6 @@
     <string name="hint_time">Medication Time</string>
     <string name="button_salvar">Save Medication</string>
     <string name="taken">Taken</string>
-    <string name="nomeapp">Medicine reminder APP</string>
     <string name="remedio_salvo">Medication saved successfully!</string>
     <string name="remedio_atualizado">Medication updated!</string>
     <string name="campos_vazios">Please fill in all fields!</string>

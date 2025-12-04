@@ -1,4 +1,5 @@
 <resources>
+    <string name="nomeapp">薬アプリ</string>
     <string name="app_name" translatable="false">AF_237052</string>
     <string name="button_novo">新しい医学</string>
     <string name="hint_nome">薬の名前</string>
@@ -6,7 +7,6 @@
     <string name="hint_time">服薬時間</string>
     <string name="button_salvar">薬を保存する</string>
     <string name="taken">撮影された</string>
-    <string name="nomeapp">お薬リマインダーアプリ</string>
     <string name="remedio_salvo">薬の保存に成功しました!</string>
     <string name="remedio_atualizado">お薬更新しました！</string>
     <string name="campos_vazios">すべてのフィールドに入力してください。</string>

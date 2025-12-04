@@ -1,4 +1,5 @@
 <resources>
+    <string name="nomeapp">Aplicativo de Remédios</string>
     <string name="app_name" translatable="false">AF_237052</string>
     <string name="button_novo">Novo Medicamento</string>
     <string name="hint_nome">Nome do Remédio</string>
@@ -6,7 +7,6 @@
     <string name="hint_time">Tempo de consumo(horas)</string>
     <string name="button_salvar">Salvar Remédio</string>
     <string name="taken">Já tomado</string>
-    <string name="nomeapp">Aplicativo de lembrete de medicamentos</string>
     <string name="remedio_salvo">Remédio salvo com sucesso!</string>
     <string name="remedio_atualizado">Remédio atualizado!</string>
     <string name="campos_vazios">Preencha todos os campos!</string>

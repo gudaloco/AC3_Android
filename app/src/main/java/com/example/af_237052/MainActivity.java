@@ -1,7 +1,11 @@
 package com.example.af_237052;
 
+import androidx.annotation.NonNull;
+
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -10,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -35,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private RemedioAdapter adapter;
     private List<Remedio> listaRemedio = new ArrayList<>();
     private RecyclerView recyclerMedicamentos;
+    private static final int PERMISSION_REQUEST_CODE = 1001;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +52,13 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        
+        solicitarPermissaoNotificacao();
 
         db = FirebaseFirestore.getInstance();
-        tNome = findViewById(R.id.edtNome);
-        tDescricao = findViewById(R.id.edtDescricao);
-        tTime = findViewById(R.id.edtTime);
+        //tNome = findViewById(R.id.edtNome);
+        //tDescricao = findViewById(R.id.edtDescricao);
+       // tTime = findViewById(R.id.edtTime);
 
         recyclerMedicamentos = findViewById(R.id.recyclerViewMedicamentos);
         recyclerMedicamentos.setLayoutManager(new LinearLayoutManager(this));
@@ -66,6 +74,33 @@ public class MainActivity extends AppCompatActivity {
             excluirRemedio(remedio, position);
 
         });
+    }
+    private void solicitarPermissaoNotificacao() {
+        // Verifica se a versão do Android é 13 (Tiramisu) ou superior
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                // Se a permissão não foi concedida, solicita ao usuário
+                requestPermissions(new String[]{android.Manifest.permission.POST_NOTIFICATIONS},
+                        PERMISSION_REQUEST_CODE);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permissão concedida!
+                Toast.makeText(this, "Permissão de notificação concedida.", Toast.LENGTH_SHORT).show();
+            } else {
+                // Permissão negada. O usuário não receberá notificações.
+                Toast.makeText(this, "Permissão de notificação negada. Lembretes não funcionarão.", Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     @Override
