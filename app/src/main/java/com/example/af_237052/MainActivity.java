@@ -22,6 +22,10 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseFirestore db;
@@ -96,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void excluirRemedio(Remedio remedio, int position) {
+        cancelarAlarme(remedio);
         db.collection("remedios").document(remedio.getId())
                 .delete()
                 .addOnSuccessListener(aVoid -> {
@@ -105,6 +110,28 @@ public class MainActivity extends AppCompatActivity {
                 });
 
     }
+    /**
+     * Cancela o alarme de um remédio existente.
+     */
+    private void cancelarAlarme(Remedio remedio) {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlarmReceiver.class);
+
+        // O requestCode deve ser o mesmo usado no agendamento
+        int requestCode = remedio.getId().hashCode();
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(
+                this,
+                requestCode,
+                intent,
+                PendingIntent.FLAG_NO_CREATE | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        if (alarmManager != null && pendingIntent != null) {
+            alarmManager.cancel(pendingIntent);
+        }
+    }
+
 
 
 }
