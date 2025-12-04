@@ -6,4 +6,5 @@
     <string name="hint_time">Tempo de consumo(horas)</string>
     <string name="button_salvar">Salvar Remédio</string>
     <string name="taken">Já tomado</string>
+    <string name="nomeapp">Aplicativo de lembrete de medicamentos</string>
 </resources>

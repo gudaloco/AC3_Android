@@ -22,6 +22,7 @@ public class CadastroEdicao extends AppCompatActivity {
     private Button buttonSalvar;
     private EditText edtNome, edtDescricao, edtTime;
     private CheckBox checkBoxTomado;
+    private Remedio EditandoRemedio = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,16 +41,25 @@ public class CadastroEdicao extends AppCompatActivity {
         edtTime = findViewById(R.id.edtTime);
         checkBoxTomado = findViewById((R.id.checkBoxTomado));
 
-        //recyclerMedicamentos = findViewById(R.id.recyclerViewMedicamentos);
-        //recyclerMedicamentos.setLayoutManager(new LinearLayoutManager(this));
-       // adapter = new RemedioAdapter(listaRemedio);
-        //.setAdapter(adapter);
+        buttonSalvar = findViewById(R.id.buttonSalvar);
+        buttonSalvar.setOnClickListener(v -> {
+            SalvarEVoltar();
+        });
+        Intent intent = getIntent();
+        if (intent.hasExtra("remedio_para_edicao")) {
+            EditandoRemedio = (Remedio) intent.getSerializableExtra("remedio_para_edicao");
 
-        //carregarRemedios();
-        //checkBoxTomado = findViewById(R.id.checkBoxTomado);
-        //buttonNovo = findViewById(R.id.buttonNovo);
+            if (EditandoRemedio != null) {
+                edtNome.setText(EditandoRemedio.getNome());
+                edtDescricao.setText(EditandoRemedio.getDescricao());
+                edtTime.setText(String.valueOf(EditandoRemedio.getHorario()));
+                checkBoxTomado.setChecked(EditandoRemedio.getCheck());
 
-        //SalvarEVoltar();
+                buttonSalvar.setText("Atualizar Remédio");
+            }
+        }
+        // ----------------------------------------------------
+
         buttonSalvar = findViewById(R.id.buttonSalvar);
         buttonSalvar.setOnClickListener(v -> {
             SalvarEVoltar();
@@ -69,35 +79,31 @@ public class CadastroEdicao extends AppCompatActivity {
 
         int tempoRemedio = Integer.parseInt(tempoRemedioStr);
 
-        if (EditarRemedio(); == null) {
+        if (EditandoRemedio == null) {
             Remedio remedio = new Remedio(null, nome, descricao, tempoRemedio, check);
             db.collection("remedios")
                     .add(remedio)
                     .addOnSuccessListener(doc -> {
                         remedio.setId(doc.getId());
                         Toast.makeText(this, "Remedio salvo!", Toast.LENGTH_SHORT).show();
-                        carregarRemedios();
                     });
         } else {
-            filmeEditando.setNome(nome);
-            filmeEditando.setDescricao(descricao);
-            filmeEditando.setHorario(tempoRemedio);
-            filmeEditando.setCheck(check);
+            EditandoRemedio.setNome(nome);
+            EditandoRemedio.setDescricao(descricao);
+            EditandoRemedio.setHorario(tempoRemedio);
+            EditandoRemedio.setCheck(check);
 
-            db.collection("remedios").document(filmeEditando.getId())
-                    .set(filmeEditando)
+            db.collection("remedios").document(EditandoRemedio.getId())
+                    .set(EditandoRemedio)
                     .addOnSuccessListener(aVoid -> {
                         Toast.makeText(this, "Remedio atualizado!", Toast.LENGTH_SHORT).show();
-                        limparCampos();
-                        carregarFilmes();
-                        filmeEditando = null;
+                       // limparCampos();
+                        //get.carregarRemedios();
+                        EditandoRemedio = null;
+                        finish();
                     });
         }
 
-        Intent intent = new Intent(CadastroEdicao.this, MainActivity.class);
-        startActivity(intent);
-    }
-    private void EditarRemedio(){
-
+        finish();
     }
 }

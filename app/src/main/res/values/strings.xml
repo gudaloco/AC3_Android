@@ -6,4 +6,5 @@
     <string name="hint_time">Medication Time</string>
     <string name="button_salvar">Save Medication</string>
     <string name="taken">already taken</string>
+    <string name="nomeapp">Medicine reminder APP</string>
 </resources>

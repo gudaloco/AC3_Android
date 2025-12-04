@@ -1,6 +1,8 @@
 package com.example.af_237052;
 
-public class Remedio {
+import java.io.Serializable;
+
+public class Remedio implements Serializable {
     private String id;
     private String nome;
     private String descricao;

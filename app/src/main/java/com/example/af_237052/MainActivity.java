@@ -1,6 +1,7 @@
 package com.example.af_237052;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -15,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +24,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private FirebaseFirestore db;
-    //private EditText edtNome, edtDescricao, edtTime;
+    private EditText tNome, tDescricao, tTime;
     private CheckBox checkBoxTomado;
     private Button buttonNovo;
     private RemedioAdapter adapter;
@@ -41,17 +43,15 @@ public class MainActivity extends AppCompatActivity {
         });
 
         db = FirebaseFirestore.getInstance();
-        //edtNome = findViewById(R.id.edtNome);
-        //edtDescricao = findViewById(R.id.edtDescricao);
-        //edtTime = findViewById(R.id.edtTime);
+        tNome = findViewById(R.id.edtNome);
+        tDescricao = findViewById(R.id.edtDescricao);
+        tTime = findViewById(R.id.edtTime);
 
         recyclerMedicamentos = findViewById(R.id.recyclerViewMedicamentos);
         recyclerMedicamentos.setLayoutManager(new LinearLayoutManager(this));
         adapter = new RemedioAdapter(listaRemedio);
         recyclerMedicamentos.setAdapter(adapter);
-//        findViewById(R.id.buttonSalvar).setOnClickListener(v -> salvarRemedio());
 
-        //carregarRemedios();
         checkBoxTomado = findViewById(R.id.checkBoxTomado);
         buttonNovo = findViewById(R.id.buttonNovo);
         buttonNovo.setOnClickListener(v -> {
@@ -59,13 +59,44 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    private void carregarRemedios(){
+    @Override
+    protected void onResume() {
+        super.onResume();
+        carregarRemedios();
+    }
+
+    private void carregarRemedios() {
+        db.collection("remedios")
+                .get()
+                .addOnSuccessListener(query -> {
+                    listaRemedio.clear();
+                    for (QueryDocumentSnapshot doc : query) {
+                        Remedio f = doc.toObject(Remedio.class);
+                        f.setId(doc.getId());
+                        listaRemedio.add(f);
+                    }
+                    adapter.notifyDataSetChanged();
+                });
+        adapter.setOnItemClickListener(remedio -> {
+            Intent intent = new Intent(this, CadastroEdicao.class);
+            intent.putExtra("remedio_para_edicao", remedio);
+            startActivity(intent);
+        });
+
     }
 
     private void novoMedicamento(){
         Intent intent = new Intent(MainActivity.this, CadastroEdicao.class);
-
         startActivity(intent);
+    }
+
+    private void excluirRemedio(Remedio remedio, int position) {
+        db.collection("filmes").document(remedio.getId())
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    listaRemedio.remove(position);
+                });
+
     }
 
 

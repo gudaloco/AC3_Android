@@ -1,5 +1,6 @@
 package com.example.af_237052;
 
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,14 +42,24 @@ public class RemedioAdapter extends RecyclerView.Adapter<RemedioAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Remedio f = remedios.get(position);
-        holder.txt1.setText(f.getNome() + " | Descrição: " +f.getDescricao());
-        holder.txt2.setText("Horario " + f.getHorario() + f.getCheck());
-        /*if (f.getCheck()){
-            holder.txt3.setText("Já Visto");
-        } else {
-            holder.txt3.setText("não Visto");
-        }*/
 
+        // ----------------------------------------------------
+        // 1. Lógica para Colorir a Linha Inteira (itemView)
+        // ----------------------------------------------------
+        if (f.getCheck()) {
+            // Se o CheckBox está marcado (True), define um verde claro
+            holder.itemView.setBackgroundColor(Color.parseColor("#C8E6C9")); // Verde Suave
+        } else {
+            // Se não, define a cor padrão do fundo (ex: Branco)
+            holder.itemView.setBackgroundColor(Color.WHITE);
+        }
+        // ----------------------------------------------------
+
+        holder.txt1.setText(f.getNome() + " | Descrição: " +f.getDescricao());
+        // Se a sua propriedade booleana for .getCheck()
+        holder.txt2.setText("Horario " + f.getHorario() + " | Tomado: " + (f.getCheck() ? "Sim" : "Não"));
+
+        // ... (resto dos listeners de clique) ...
         holder.itemView.setOnClickListener(v -> {
             if (clickListener != null) clickListener.onItemClick(f);
         });
