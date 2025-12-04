@@ -7,4 +7,11 @@
     <string name="button_salvar">Salvar Remédio</string>
     <string name="taken">Já tomado</string>
     <string name="nomeapp">Aplicativo de lembrete de medicamentos</string>
+    <string name="remedio_salvo">Remédio salvo com sucesso!</string>
+    <string name="remedio_atualizado">Remédio atualizado!</string>
+    <string name="campos_vazios">Preencha todos os campos!</string>
+    <string name="excluir_remedio">Deletando o Medicamento!</string>
+    <string name="descricao">Descrição</string>
+    <string name="horario">Horario de consumo</string>
+    <string name="finalized">Finalizado</string>
 </resources>

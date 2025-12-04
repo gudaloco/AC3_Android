@@ -55,10 +55,9 @@ public class CadastroEdicao extends AppCompatActivity {
                 edtTime.setText(String.valueOf(EditandoRemedio.getHorario()));
                 checkBoxTomado.setChecked(EditandoRemedio.getCheck());
 
-                buttonSalvar.setText("Atualizar Remédio");
+                buttonSalvar.setText(R.string.button_salvar);
             }
         }
-        // ----------------------------------------------------
 
         buttonSalvar = findViewById(R.id.buttonSalvar);
         buttonSalvar.setOnClickListener(v -> {
@@ -69,36 +68,38 @@ public class CadastroEdicao extends AppCompatActivity {
     private void SalvarEVoltar(){
         String nome = edtNome.getText().toString().trim();
         String descricao = edtDescricao.getText().toString().trim();
-        String tempoRemedioStr = edtTime.getText().toString().trim();
-        boolean check = checkBoxTomado.isChecked();
+        String horarioStr = edtTime.getText().toString().trim();
+        //boolean check = checkBoxTomado.isChecked();
+        boolean checkTomado = checkBoxTomado.isChecked();
+        boolean checkFinalizado = false;
 
-        if (nome.isEmpty() || descricao.isEmpty() || tempoRemedioStr.isEmpty()) {
-            Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
+        if (nome.isEmpty() || descricao.isEmpty() || horarioStr.isEmpty()) {
+            Toast.makeText(this, R.string.campos_vazios, Toast.LENGTH_SHORT).show();
             return;
         }
 
-        int tempoRemedio = Integer.parseInt(tempoRemedioStr);
+        //int tempoRemedio = Integer.parseInt(tempoRemedioStr);
 
         if (EditandoRemedio == null) {
-            Remedio remedio = new Remedio(null, nome, descricao, tempoRemedio, check);
+            Remedio remedio = new Remedio(null, nome, descricao, horarioStr, checkTomado, checkFinalizado);
             db.collection("remedios")
                     .add(remedio)
                     .addOnSuccessListener(doc -> {
                         remedio.setId(doc.getId());
-                        Toast.makeText(this, "Remedio salvo!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.remedio_salvo, Toast.LENGTH_SHORT).show();
                     });
         } else {
             EditandoRemedio.setNome(nome);
             EditandoRemedio.setDescricao(descricao);
-            EditandoRemedio.setHorario(tempoRemedio);
-            EditandoRemedio.setCheck(check);
+            EditandoRemedio.setHorario(horarioStr);
+            //EditandoRemedio.setCheck(check);
+            EditandoRemedio.setCheck(checkTomado);
+            EditandoRemedio.setFinalizado(checkFinalizado);
 
             db.collection("remedios").document(EditandoRemedio.getId())
                     .set(EditandoRemedio)
                     .addOnSuccessListener(aVoid -> {
-                        Toast.makeText(this, "Remedio atualizado!", Toast.LENGTH_SHORT).show();
-                       // limparCampos();
-                        //get.carregarRemedios();
+                        Toast.makeText(this, R.string.remedio_atualizado, Toast.LENGTH_SHORT).show();
                         EditandoRemedio = null;
                         finish();
                     });

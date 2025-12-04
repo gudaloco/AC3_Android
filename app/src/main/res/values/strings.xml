@@ -5,6 +5,13 @@
     <string name="hint_descricao">Description</string>
     <string name="hint_time">Medication Time</string>
     <string name="button_salvar">Save Medication</string>
-    <string name="taken">already taken</string>
+    <string name="taken">Taken</string>
     <string name="nomeapp">Medicine reminder APP</string>
+    <string name="remedio_salvo">Medication saved successfully!</string>
+    <string name="remedio_atualizado">Medication updated!</string>
+    <string name="campos_vazios">Please fill in all fields!</string>
+    <string name="excluir_remedio">deleting medication.</string>
+    <string name="descricao">description</string>
+    <string name="horario">Medication Time</string>
+    <string name="finalized">Finalized</string>
 </resources>

@@ -6,19 +6,21 @@ public class Remedio implements Serializable {
     private String id;
     private String nome;
     private String descricao;
-    private Integer horario;
+    private String horario;
     private Boolean check;
+    private Boolean finalizado;
 
 
     public Remedio() {
     }
 
-    public Remedio(String id, String nome, String descricao, Integer horario, Boolean check) {
+    public Remedio(String id, String nome, String descricao, String horario, Boolean check, Boolean finalizado) {
         this.id = id;
         this.nome = nome;
         this.descricao = descricao;
         this.horario = horario;
         this.check = check;
+        this.finalizado = finalizado;
     }
 
     public String getId() {
@@ -45,11 +47,11 @@ public class Remedio implements Serializable {
         this.descricao = descricao;
     }
 
-    public Integer getHorario() {
+    public String getHorario() {
         return horario;
     }
 
-    public void setHorario(Integer horario) {
+    public void setHorario(String horario) {
         this.horario = horario;
     }
 
@@ -59,5 +61,13 @@ public class Remedio implements Serializable {
 
     public void setCheck(Boolean check) {
         this.check = check;
+    }
+
+    public Boolean getFinalizado() {
+        return finalizado != null ? finalizado : false;
+    }
+
+    public void setFinalizado(Boolean finalizado) {
+        this.finalizado = finalizado;
     }
 }

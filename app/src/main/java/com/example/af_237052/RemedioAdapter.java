@@ -5,9 +5,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.List;
 
@@ -15,12 +18,13 @@ public class RemedioAdapter extends RecyclerView.Adapter<RemedioAdapter.ViewHold
     private List<Remedio> remedios;
     private OnItemClickListener clickListener;
     private OnItemLongClickListener longClickListener;
+    private FirebaseFirestore db = FirebaseFirestore.getInstance();
 
     public interface OnItemClickListener {
         void onItemClick(Remedio remedio);
     }
     public interface OnItemLongClickListener {
-        void onItemLongClickListener(Remedio remedio);
+        void onItemLongClickListener(Remedio remedio, int position);
     }
     public RemedioAdapter(List<Remedio> remedios) {
         this.remedios = remedios;
@@ -35,7 +39,7 @@ public class RemedioAdapter extends RecyclerView.Adapter<RemedioAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext())
-                .inflate(android.R.layout.simple_list_item_2, parent, false);
+                .inflate(R.layout.item_remedio_checkbox, parent, false);
         return new ViewHolder(v);
     }
 
@@ -43,31 +47,54 @@ public class RemedioAdapter extends RecyclerView.Adapter<RemedioAdapter.ViewHold
     public void onBindViewHolder(ViewHolder holder, int position) {
         Remedio f = remedios.get(position);
 
-        // ----------------------------------------------------
-        // 1. Lógica para Colorir a Linha Inteira (itemView)
-        // ----------------------------------------------------
+        String descricaoLabel = holder.itemView.getContext().getString(R.string.descricao);
+        String horarioLabel = holder.itemView.getContext().getString(R.string.horario);
+
         if (f.getCheck()) {
-            // Se o CheckBox está marcado (True), define um verde claro
-            holder.itemView.setBackgroundColor(Color.parseColor("#C8E6C9")); // Verde Suave
+            holder.itemView.setBackgroundColor(Color.parseColor("#C8E6C9"));
         } else {
-            // Se não, define a cor padrão do fundo (ex: Branco)
             holder.itemView.setBackgroundColor(Color.WHITE);
         }
-        // ----------------------------------------------------
 
-        holder.txt1.setText(f.getNome() + " | Descrição: " +f.getDescricao());
-        // Se a sua propriedade booleana for .getCheck()
-        holder.txt2.setText("Horario " + f.getHorario() + " | Tomado: " + (f.getCheck() ? "Sim" : "Não"));
+        holder.txtNomeDescricao.setText(f.getNome() + " | " + descricaoLabel + ": " + f.getDescricao());
+        holder.txtHorarioStatus.setText(horarioLabel + ": " + f.getHorario());
 
-        // ... (resto dos listeners de clique) ...
+        holder.cbTomado.setOnCheckedChangeListener(null);
+        holder.cbFinalizado.setOnCheckedChangeListener(null);
+
+        holder.cbTomado.setChecked(f.getCheck());
+        holder.cbFinalizado.setChecked(f.getFinalizado());
+
+        holder.cbTomado.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            f.setCheck(isChecked);
+            atualizarRemedio(f, position);
+        });
+
+        holder.cbFinalizado.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            f.setFinalizado(isChecked);
+            atualizarRemedio(f, position);
+        });
+
         holder.itemView.setOnClickListener(v -> {
             if (clickListener != null) clickListener.onItemClick(f);
         });
 
         holder.itemView.setOnLongClickListener(v -> {
-            if (longClickListener != null) longClickListener.onItemLongClickListener(f);
+            if (longClickListener != null) {
+                longClickListener.onItemLongClickListener(f, position);
+            }
             return true;
         });
+    }
+
+    private void atualizarRemedio(Remedio remedio, int position) {
+        if (remedio.getId() != null) {
+            db.collection("remedios").document(remedio.getId())
+                    .set(remedio)
+                    .addOnSuccessListener(aVoid -> {
+                        notifyItemChanged(position);
+                    });
+        }
     }
 
     @Override
@@ -76,12 +103,15 @@ public class RemedioAdapter extends RecyclerView.Adapter<RemedioAdapter.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView txt1, txt2;
+        TextView txtNomeDescricao, txtHorarioStatus;
+        CheckBox cbTomado, cbFinalizado;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            txt1 = itemView.findViewById(android.R.id.text1);
-            txt2 = itemView.findViewById(android.R.id.text2);
+            txtNomeDescricao = itemView.findViewById(R.id.text_nome_descricao);
+            txtHorarioStatus = itemView.findViewById(R.id.text_horario_status);
+            cbTomado = itemView.findViewById(R.id.checkbox_tomado_item);
+            cbFinalizado = itemView.findViewById(R.id.checkbox_finalizado);
         }
     }
 }

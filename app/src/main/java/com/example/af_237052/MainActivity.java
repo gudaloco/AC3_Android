@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseFirestore db;
     private EditText tNome, tDescricao, tTime;
-    private CheckBox checkBoxTomado;
+    //private CheckBox checkBoxTomado;
     private Button buttonNovo;
     private RemedioAdapter adapter;
     private List<Remedio> listaRemedio = new ArrayList<>();
@@ -52,10 +53,14 @@ public class MainActivity extends AppCompatActivity {
         adapter = new RemedioAdapter(listaRemedio);
         recyclerMedicamentos.setAdapter(adapter);
 
-        checkBoxTomado = findViewById(R.id.checkBoxTomado);
+        //checkBoxTomado = findViewById(R.id.checkBoxTomado);
         buttonNovo = findViewById(R.id.buttonNovo);
         buttonNovo.setOnClickListener(v -> {
             novoMedicamento();
+        });
+        adapter.setOnItemLongClickListener((remedio, position) -> {
+            excluirRemedio(remedio, position);
+
         });
     }
 
@@ -91,10 +96,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void excluirRemedio(Remedio remedio, int position) {
-        db.collection("filmes").document(remedio.getId())
+        db.collection("remedios").document(remedio.getId())
                 .delete()
                 .addOnSuccessListener(aVoid -> {
                     listaRemedio.remove(position);
+                    adapter.notifyItemRemoved(position);
+                    Toast.makeText(this, R.string.excluir_remedio, Toast.LENGTH_SHORT).show();
                 });
 
     }
