@@ -7,6 +7,17 @@
     android:layout_height="match_parent"
     tools:context=".CadastroEdicao">
 
+    <CheckBox
+        android:id="@+id/checkBoxTomado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="96dp"
+        android:text="@string/taken"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtTime" />
+
     <EditText
         android:id="@+id/edtNome"
         android:layout_width="wrap_content"
@@ -52,10 +63,10 @@
         android:id="@+id/buttonSalvar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="64dp"
+        android:layout_marginTop="96dp"
         android:text="@string/button_salvar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edtTime" />
+        app:layout_constraintTop_toBottomOf="@+id/checkBoxTomado" />
 </androidx.constraintlayout.widget.ConstraintLayout>

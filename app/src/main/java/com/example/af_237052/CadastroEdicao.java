@@ -3,7 +3,9 @@ package com.example.af_237052;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +21,7 @@ public class CadastroEdicao extends AppCompatActivity {
     private FirebaseFirestore db;
     private Button buttonSalvar;
     private EditText edtNome, edtDescricao, edtTime;
+    private CheckBox checkBoxTomado;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,7 @@ public class CadastroEdicao extends AppCompatActivity {
         edtNome = findViewById(R.id.edtNome);
         edtDescricao = findViewById(R.id.edtDescricao);
         edtTime = findViewById(R.id.edtTime);
+        checkBoxTomado = findViewById((R.id.checkBoxTomado));
 
         //recyclerMedicamentos = findViewById(R.id.recyclerViewMedicamentos);
         //recyclerMedicamentos.setLayoutManager(new LinearLayoutManager(this));
@@ -53,6 +57,43 @@ public class CadastroEdicao extends AppCompatActivity {
     }
 
     private void SalvarEVoltar(){
+        String nome = edtNome.getText().toString().trim();
+        String descricao = edtDescricao.getText().toString().trim();
+        String tempoRemedioStr = edtTime.getText().toString().trim();
+        boolean check = checkBoxTomado.isChecked();
+
+        if (nome.isEmpty() || descricao.isEmpty() || tempoRemedioStr.isEmpty()) {
+            Toast.makeText(this, "Preencha todos os campos!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        int tempoRemedio = Integer.parseInt(tempoRemedioStr);
+
+        if (EditarRemedio(); == null) {
+            Remedio remedio = new Remedio(null, nome, descricao, tempoRemedio, check);
+            db.collection("remedios")
+                    .add(remedio)
+                    .addOnSuccessListener(doc -> {
+                        remedio.setId(doc.getId());
+                        Toast.makeText(this, "Remedio salvo!", Toast.LENGTH_SHORT).show();
+                        carregarRemedios();
+                    });
+        } else {
+            filmeEditando.setNome(nome);
+            filmeEditando.setDescricao(descricao);
+            filmeEditando.setHorario(tempoRemedio);
+            filmeEditando.setCheck(check);
+
+            db.collection("remedios").document(filmeEditando.getId())
+                    .set(filmeEditando)
+                    .addOnSuccessListener(aVoid -> {
+                        Toast.makeText(this, "Remedio atualizado!", Toast.LENGTH_SHORT).show();
+                        limparCampos();
+                        carregarFilmes();
+                        filmeEditando = null;
+                    });
+        }
+
         Intent intent = new Intent(CadastroEdicao.this, MainActivity.class);
         startActivity(intent);
     }
