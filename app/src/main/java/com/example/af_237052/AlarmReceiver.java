@@ -15,7 +15,6 @@ public class AlarmReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        // Extrai os dados do Remédio que foram passados pelo Alarme
         String nomeRemedio = intent.getStringExtra("nome_remedio");
         String descricaoRemedio = intent.getStringExtra("descricao_remedio");
         String remedioId = intent.getStringExtra("remedio_id");
@@ -37,7 +36,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         }
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_launcher_foreground) // Use um ícone adequado
+                .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setContentTitle("⏰ Lembrete de Medicamento")
                 .setContentText("Hora de tomar: " + nomeRemedio)
                 .setStyle(new NotificationCompat.BigTextStyle()

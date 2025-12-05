@@ -56,16 +56,12 @@ public class MainActivity extends AppCompatActivity {
         solicitarPermissaoNotificacao();
 
         db = FirebaseFirestore.getInstance();
-        //tNome = findViewById(R.id.edtNome);
-        //tDescricao = findViewById(R.id.edtDescricao);
-       // tTime = findViewById(R.id.edtTime);
 
         recyclerMedicamentos = findViewById(R.id.recyclerViewMedicamentos);
         recyclerMedicamentos.setLayoutManager(new LinearLayoutManager(this));
         adapter = new RemedioAdapter(listaRemedio);
         recyclerMedicamentos.setAdapter(adapter);
 
-        //checkBoxTomado = findViewById(R.id.checkBoxTomado);
         buttonNovo = findViewById(R.id.buttonNovo);
         buttonNovo.setOnClickListener(v -> {
             novoMedicamento();
@@ -76,12 +72,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     private void solicitarPermissaoNotificacao() {
-        // Verifica se a versão do Android é 13 (Tiramisu) ou superior
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS)
                     != PackageManager.PERMISSION_GRANTED) {
 
-                // Se a permissão não foi concedida, solicita ao usuário
                 requestPermissions(new String[]{android.Manifest.permission.POST_NOTIFICATIONS},
                         PERMISSION_REQUEST_CODE);
             }
@@ -145,14 +139,10 @@ public class MainActivity extends AppCompatActivity {
                 });
 
     }
-    /**
-     * Cancela o alarme de um remédio existente.
-     */
     private void cancelarAlarme(Remedio remedio) {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlarmReceiver.class);
 
-        // O requestCode deve ser o mesmo usado no agendamento
         int requestCode = remedio.getId().hashCode();
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(
